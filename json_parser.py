@@ -3,7 +3,7 @@ import sys
 import os
 
 def json_parser(prefix):
-    json_dir = '/srv/runme/'
+    json_dir = '~/srv/runme/'
 
     files = os.listdir(json_dir)
     output = list()
