@@ -14,16 +14,10 @@ def deploy(key = 'key/test_key.pem', server_ip = None, prefix = None):
     client.connect(server_ip, pkey = paramiko.RSAKey.from_private_key_file(key), username='testtest')
     # Execute command to clone repository
     print 'Connected to server'
-    # Check if repository exists
-    stdin, stdout, stderr = client.exec_command('cd data_ingestion_system')
-    if stderr.read() != '':
-        # Clone repository if not present
-        print 'Cloning repository'
-        stdin, stdout, stderr = client.exec_command('git clone https://github.com/vinnsvinay/data_ingestion_system')
-    else:
-        # Pull repository if present
-        print 'Pulling repository'
-        stdin, stdout, stderr = client.exec_command('cd data_ingestion_system; git pull')
+    # Delete folder before cloning
+    stdin, stdout, stderr = client.exec_command('rm -rf data_ingestion_system')
+    print 'Cloning repository'
+    stdin, stdout, stderr = client.exec_command('git clone https://github.com/vinnsvinay/data_ingestion_system')
     # Adding a crontab
     stdin, stdout, stderr = client.exec_command('crontab -l > json_cron')
     cron_command = 'echo "* * * * * python /home/testtest/data_ingestion_system/json_parser.py {}" \
@@ -31,6 +25,8 @@ def deploy(key = 'key/test_key.pem', server_ip = None, prefix = None):
     stdin, stdout, stderr = client.exec_command(cron_command)
     stdin, stdout, stderr = client.exec_command('crontab json_cron')
     print('Running cronjob')
+
+    return None
     
 
 server_ip = '52.89.29.79'
