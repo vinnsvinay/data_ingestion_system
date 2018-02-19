@@ -6,7 +6,7 @@ import sys
 import os
 import logging
 
-LOG_FILE = '../json_parse.log'
+LOG_FILE = './json_parse.log'
 JSON_DIR = '/srv/runme/'
 
 
